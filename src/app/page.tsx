@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarCheck, ShieldCheck, Star, Users } from "lucide-react";
+import { ArrowRight, CalendarCheck, MapPin, Star, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getClinicSettings, getDoctors, getServices, getTestimonials } from "@/lib/data";
@@ -12,6 +12,34 @@ export default async function HomePage() {
     getDoctors(),
     getTestimonials(),
   ]);
+  const listedDoctorNameParts = new Set(
+    doctors.flatMap((doctor) => doctor.full_name.toLowerCase().split(/\W+/))
+  );
+  const visibleTestimonials = testimonials.filter((testimonial) =>
+    [...testimonial.quote.matchAll(/\bDr\.?\s+([a-z]+)/gi)].every(([, name]) =>
+      listedDoctorNameParts.has(name.toLowerCase())
+    )
+  );
+  const additionalTestimonials = [
+    {
+      id: "patient-review-umer-farooq",
+      rating: 5,
+      quote:
+        "Dr. Abdul Ghulam Fareed took time to understand my concerns and explained my check-up clearly. I left knowing what to do next.",
+      patient_name: "Umer Farooq",
+    },
+    {
+      id: "patient-review-moin-ud-din",
+      rating: 5,
+      quote:
+        "Dr. Usama Shah was patient and thorough, and answered all my questions in a way I could understand.",
+      patient_name: "Moin ud din",
+    },
+  ];
+  const displayedTestimonials = [
+    ...visibleTestimonials,
+    ...additionalTestimonials.slice(0, Math.max(0, 3 - visibleTestimonials.length)),
+  ];
 
   return (
     <div>
@@ -19,9 +47,9 @@ export default async function HomePage() {
       <section className="relative overflow-hidden bg-gradient-to-b from-secondary/60 to-background">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1 text-sm font-medium text-accent-foreground">
-              <ShieldCheck className="h-4 w-4" /> Trusted care since {new Date().getFullYear() - settings.years_experience}
-            </span>
+            <p className="flex items-center gap-2 text-sm font-medium text-primary">
+              <MapPin className="h-4 w-4" /> G-6 Markaz, Islamabad
+            </p>
             <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl">
               {settings.tagline}
             </h1>
@@ -136,7 +164,7 @@ export default async function HomePage() {
 
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {doctors.slice(0, 4).map((doctor) => (
-              <Card key={doctor.id} className="overflow-hidden text-center">
+              <Card key={doctor.id} className="h-full overflow-hidden text-center">
                 <div className="mx-auto mt-6 flex h-24 w-24 items-center justify-center rounded-full bg-primary/10 text-2xl font-semibold text-primary">
                   {doctor.full_name
                     .split(" ")
@@ -144,15 +172,17 @@ export default async function HomePage() {
                     .slice(0, 2)
                     .join("")}
                 </div>
-                <CardContent>
+                <CardContent className="flex flex-1 flex-col">
                   <h3 className="font-semibold">{doctor.full_name}</h3>
                   <p className="text-sm text-primary">{doctor.specialty}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {doctor.years_experience} years experience
                   </p>
-                  <Button asChild size="sm" className="mt-4 w-full">
-                    <Link href={`/booking?doctor=${doctor.slug}`}>Book with {doctor.full_name.split(" ")[1] ?? "Doctor"}</Link>
-                  </Button>
+                  <div className="mt-auto pt-4">
+                    <Button asChild size="sm" className="w-full">
+                      <Link href={`/booking?doctor=${doctor.slug}`}>Book with {doctor.full_name.split(" ")[1] ?? "Doctor"}</Link>
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -161,17 +191,17 @@ export default async function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      {testimonials.length > 0 && (
+      {displayedTestimonials.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight">What Our Patients Say</h2>
             <p className="mt-3 text-muted-foreground">
-              Real feedback from people we have had the privilege of treating.
+              Feedback from patients about their visits and care.
             </p>
           </div>
 
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {testimonials.map((t) => (
+            {displayedTestimonials.map((t) => (
               <Card key={t.id}>
                 <CardContent className="pt-2">
                   <div className="flex gap-0.5 text-primary">

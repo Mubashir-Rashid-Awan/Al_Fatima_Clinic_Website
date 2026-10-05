@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
@@ -7,13 +7,8 @@ import { WhatsAppButton } from "@/components/site/whatsapp-button";
 import { Toaster } from "@/components/ui/sonner";
 import { getClinicSettings } from "@/lib/data";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
 });
 
@@ -21,6 +16,9 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  icons: {
+    icon: { url: "/icon.svg", type: "image/svg+xml" },
+  },
   title: {
     default: "Al Fatima Clinic — Book Appointments Online",
     template: "%s | Al Fatima Clinic",
@@ -52,7 +50,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${openSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <SiteHeader clinicName={settings.clinic_name} />

@@ -53,18 +53,22 @@ export default async function DoctorProfilePage({ params }: PageProps) {
           <h1 className="text-3xl font-bold">{doctor.full_name}</h1>
           <p className="mt-1 text-lg text-primary">{doctor.specialty}</p>
 
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-4 space-y-2">
             {doctor.qualifications && (
-              <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <p className="flex items-start gap-1.5 text-sm text-muted-foreground">
                 <Award className="h-4 w-4" /> {doctor.qualifications}
-              </span>
+              </p>
             )}
-            <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <Clock className="h-4 w-4" /> {doctor.years_experience} years of experience
-            </span>
+            </p>
           </div>
 
-          {doctor.bio && <p className="mt-6 leading-relaxed text-muted-foreground">{doctor.bio}</p>}
+          {doctor.bio && (
+            <p className="mt-6 text-justify leading-relaxed text-muted-foreground">
+              {doctor.bio}
+            </p>
+          )}
 
           {doctor.services.length > 0 && (
             <div className="mt-8">

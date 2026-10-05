@@ -48,17 +48,17 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center">
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-start">
           <div>
-            <h2 className="text-2xl font-bold">Our Story</h2>
-            <p className="mt-4 leading-relaxed text-muted-foreground">
+            <h2 className="text-3xl font-bold">Our Story</h2>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               {settings.clinic_name} was founded on a simple idea: that quality healthcare
               should be accessible, transparent, and delivered without unnecessary friction.
               What began as a small general practice has grown into a multi-specialty clinic,
               while keeping the same attentive, personal approach we started with.
             </p>
-            <p className="mt-4 leading-relaxed text-muted-foreground">
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Today, our team of {Math.max(doctors.length, 4)}+ specialists sees patients across
               general medicine, dentistry, cardiology, pediatrics, dermatology, and physiotherapy,
               all supported by a booking system designed to respect your time as much as we
